@@ -1,0 +1,15 @@
+{
+  "titulo": "Resultado preliminar de homologação de inscrições — Edital nº 001/2026 – SECAD/SES/TO",
+  "arquivoFonte": "sesto-preliminar-homologacoes(1).pdf",
+  "dataDocumento": "30 de setembro de 2026",
+  "dataAtualizacao": "2026-10-01",
+  "entidade": "Fundação Getulio Vargas / Governo do Estado do Tocantins",
+  "urlOficial": "https://conhecimento.fgv.br/concursos/sesto26",
+  "totalRegistros": 69970,
+  "camposDisponiveis": ["inscricao", "nome", "cargo", "localProva", "municipio"],
+  "cotasDisponiveis": false,
+  "vagasDisponiveis": false,
+  "metrica": "Número de inscrições homologadas agrupadas por cargo e local de prova. Não é concorrência por vaga.",
+  "observacaoCotas": "O PDF não informa modalidade de cota nem classificação por cota. Os dados de cotas ficam indisponíveis até a inclusão de uma fonte oficial complementar.",
+  "observacaoPrivacidade": "A base reproduz uma relação oficial de inscrições homologadas; use os dados somente para consulta do concurso e não para enriquecer perfis pessoais."
+}

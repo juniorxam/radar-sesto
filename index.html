@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0e1c2d" />
+    <meta name="description" content="Consulta pública das inscrições homologadas do concurso SES/TO 2026 por cargo e município." />
+    <title>Radar SES/TO — inscrições homologadas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Radar SES/TO, início">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><strong>Radar</strong><em>SES/TO</em></span>
+        </a>
+        <div class="topbar-meta"><span class="live-dot"></span><span>Base pública de consulta</span><span class="topbar-divider"></span><span id="updatedAt">Atualizada em —</span></div>
+      </header>
+
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Observatório de demanda · Tocantins · 2026</p>
+          <h1 id="page-title">A concorrência começa pela leitura da lista.</h1>
+          <p class="hero-intro">Explore onde estão as inscrições homologadas do concurso da Saúde. Compare cargos, locais de prova e o tamanho da demanda com uma consulta rápida e verificável.</p>
+          <div class="hero-footnote"><span class="hero-rule"></span><span>Resultado preliminar de homologação de inscrições</span></div>
+        </div>
+        <div class="hero-signal" aria-label="Resumo da base">
+          <span class="signal-kicker">inscrições na base</span>
+          <strong id="heroTotal">—</strong>
+          <span>registros homologados</span>
+          <div class="signal-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </section>
+
+      <main>
+        <div class="transparency-banner" role="note">
+          <span class="banner-icon" aria-hidden="true">i</span>
+          <div><strong>Leitura correta dos dados</strong><p>Este painel mostra <b>inscrições homologadas</b> por cargo e local de prova. O PDF não traz número de vagas nem modalidade de cota: por isso, não calculamos concorrência por vaga e marcamos cotas como indisponíveis, sem fazer inferências.</p></div>
+          <a href="#metodologia">Ver metodologia <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <section class="workspace" aria-label="Consulta da base">
+          <aside class="filters-panel">
+            <div class="panel-label"><span class="panel-number">01</span><span>Refine a leitura</span></div>
+            <div class="filter-heading"><h2>Encontre seu recorte</h2><p>Combine os filtros para aproximar a demanda do cenário que você quer analisar.</p></div>
+
+            <label class="field-label" for="searchInput">Busca livre <span>inscrição, nome ou cargo</span></label>
+            <div class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Digite para buscar..." autocomplete="off" /><kbd>/</kbd></div>
+
+            <label class="field-label" for="cargoSelect">Cargo</label>
+            <select id="cargoSelect"><option value="">Todos os cargos</option></select>
+
+            <label class="field-label" for="municipioSelect">Município / local de prova</label>
+            <select id="municipioSelect"><option value="">Todos os municípios</option></select>
+
+            <button class="clear-button" id="clearFilters" type="button">Limpar filtros <span aria-hidden="true">↺</span></button>
+            <div class="filter-status" id="filterStatus" aria-live="polite">Carregando base...</div>
+          </aside>
+
+          <div class="dashboard-content">
+            <div class="section-intro">
+              <div><div class="panel-label"><span class="panel-number">02</span><span>Visão geral</span></div><h2>O pulso da demanda</h2></div>
+              <div class="scope-chip" id="scopeChip">Todos os registros</div>
+            </div>
+
+            <section class="metric-grid" aria-label="Indicadores">
+              <article class="metric-card metric-card-main"><span class="metric-label">Inscrições no recorte</span><strong id="filteredTotal">—</strong><span class="metric-caption" id="filteredCaption">de — na base completa</span></article>
+              <article class="metric-card"><span class="metric-label">Cargos encontrados</span><strong id="cargoTotal">—</strong><span class="metric-caption">com ao menos uma inscrição</span></article>
+              <article class="metric-card"><span class="metric-label">Municípios encontrados</span><strong id="municipioTotal">—</strong><span class="metric-caption">locais de prova</span></article>
+              <article class="metric-card metric-card-muted"><span class="metric-label">Cotas</span><strong>—</strong><span class="metric-caption">indisponível na fonte</span></article>
+            </section>
+
+            <section class="rankings-grid" aria-label="Rankings de inscrições">
+              <article class="ranking-card"><div class="card-heading"><div><span class="micro-label">por cargo</span><h3>Onde a disputa concentra</h3></div><span class="card-count" id="cargoRankingCount">—</span></div><div id="cargoRanking" class="ranking-list"></div></article>
+              <article class="ranking-card"><div class="card-heading"><div><span class="micro-label">por município</span><h3>Onde a prova reúne mais gente</h3></div><span class="card-count" id="municipioRankingCount">—</span></div><div id="municipioRanking" class="ranking-list"></div></article>
+            </section>
+
+            <section class="records-section" aria-labelledby="recordsTitle">
+              <div class="records-heading"><div><div class="panel-label"><span class="panel-number">03</span><span>Registros</span></div><h2 id="recordsTitle">Lista de inscrições</h2></div><button class="export-button" id="exportCsv" type="button"><span aria-hidden="true">↓</span> Exportar CSV</button></div>
+              <div class="table-toolbar"><span id="resultSummary">—</span><label for="pageSize">Exibir <select id="pageSize"><option>25</option><option>50</option><option>100</option></select> por página</label></div>
+              <div class="table-wrap"><table><thead><tr><th><button class="sort-button" data-sort="inscricao">Inscrição <span>↕</span></button></th><th><button class="sort-button" data-sort="nome">Candidato <span>↕</span></button></th><th><button class="sort-button" data-sort="cargo">Cargo <span>↕</span></button></th><th><button class="sort-button" data-sort="municipio">Local de prova <span>↕</span></button></th></tr></thead><tbody id="recordsBody"><tr><td colspan="4" class="loading-cell">Carregando registros...</td></tr></tbody></table></div>
+              <div class="pagination"><span id="pageInfo">—</span><div><button id="previousPage" type="button" aria-label="Página anterior">←</button><button id="nextPage" type="button" aria-label="Próxima página">→</button></div></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="methodology" id="metodologia" aria-labelledby="methodologyTitle"><div class="methodology-mark" aria-hidden="true">⌁</div><div><div class="panel-label"><span class="panel-number">04</span><span>Transparência</span></div><h2 id="methodologyTitle">O que está — e o que não está — nesta leitura</h2><p>Os dados foram extraídos do resultado preliminar de homologação de inscrições publicado pela Fundação Getulio Vargas. Cada linha contém inscrição, nome, cargo e local de prova. O arquivo não informa vagas, cotas ou classificação; qualquer cálculo que exigisse esses campos seria uma suposição, então o painel prefere mostrar a ausência.</p><div class="methodology-meta"><span><b>Fonte</b><span id="sourceName">—</span></span><span><b>Publicação</b><span id="documentDate">—</span></span><span><b>Campos</b><span>inscrição · nome · cargo · local</span></span></div><a class="source-link" id="sourceLink" href="https://conhecimento.fgv.br/concursos/sesto26" target="_blank" rel="noreferrer">Consultar página oficial da FGV <span aria-hidden="true">↗</span></a></div></section>
+      </main>
+
+      <footer><span>Radar SES/TO <span class="footer-dot">•</span> consulta pública independente</span><span>Dados de fonte oficial · leitura sem classificação</span></footer>
+    </div>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
