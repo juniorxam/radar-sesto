@@ -149,7 +149,7 @@ async function init() {
     applyFilters();
   } catch (error) {
     $('#filterStatus').textContent = 'Não foi possível carregar os dados.';
-    $('#recordsBody').innerHTML = `<tr><td colspan="4" class="empty-cell"><strong>Erro ao carregar a base</strong>${escapeHtml(error.message)}</td></tr>`;
+    $('#recordsBody').innerHTML = `<tr><td colspan="5" class="empty-cell"><strong>Erro ao carregar a base</strong>${escapeHtml(error.message)}</td></tr>`;
   }
 }
 

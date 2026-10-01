@@ -12,6 +12,6 @@
   "cotaDisponivel": "Pessoa preta ou parda",
   "vagasDisponiveis": false,
   "metrica": "Número de inscrições homologadas agrupadas por cargo e local de prova. Não é concorrência por vaga.",
-  "observacaoCotas": "A fonte complementar identifica candidatos inscritos para concorrer às vagas destinadas a pessoa preta ou parda. Ela não informa classificação por cota nem número de vagas.",
+  "observacaoCotas": "A fonte complementar identifica candidatos inscritos para concorrer às vagas destinadas a pessoa preta ou parda. Ela não informa classificação por cota nem número de vagas. Não identificado na lista complementar não significa automaticamente ampla concorrência.",
   "observacaoPrivacidade": "A base reproduz relações oficiais do concurso; use os dados somente para consulta do certame e não para enriquecer perfis pessoais."
 }
