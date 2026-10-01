@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="stylesheet" href="./src/quota.css" />
   </head>
   <body>
     <div class="site-shell">
@@ -39,7 +40,7 @@
       <main>
         <div class="transparency-banner" role="note">
           <span class="banner-icon" aria-hidden="true">i</span>
-          <div><strong>Leitura correta dos dados</strong><p>Este painel mostra <b>inscrições homologadas</b> por cargo e local de prova. O PDF não traz número de vagas nem modalidade de cota: por isso, não calculamos concorrência por vaga e marcamos cotas como indisponíveis, sem fazer inferências.</p></div>
+          <div><strong>Leitura correta dos dados</strong><p>Este painel mostra <b>inscrições homologadas</b> por cargo e local de prova. A fonte complementar identifica pessoas pretas ou pardas pelo número de inscrição, mas os documentos não trazem número de vagas nem classificação por cota.</p></div>
           <a href="#metodologia">Ver metodologia <span aria-hidden="true">↗</span></a>
         </div>
 
@@ -57,6 +58,9 @@
             <label class="field-label" for="municipioSelect">Município / local de prova</label>
             <select id="municipioSelect"><option value="">Todos os municípios</option></select>
 
+            <label class="field-label" for="cotaSelect">Situação na lista de cotas</label>
+            <select id="cotaSelect"><option value="">Todas as situações</option><option value="Pessoa preta ou parda">Pessoa preta ou parda</option><option value="__sem_marcacao__">Não identificado na lista complementar</option></select>
+
             <button class="clear-button" id="clearFilters" type="button">Limpar filtros <span aria-hidden="true">↺</span></button>
             <div class="filter-status" id="filterStatus" aria-live="polite">Carregando base...</div>
           </aside>
@@ -71,7 +75,7 @@
               <article class="metric-card metric-card-main"><span class="metric-label">Inscrições no recorte</span><strong id="filteredTotal">—</strong><span class="metric-caption" id="filteredCaption">de — na base completa</span></article>
               <article class="metric-card"><span class="metric-label">Cargos encontrados</span><strong id="cargoTotal">—</strong><span class="metric-caption">com ao menos uma inscrição</span></article>
               <article class="metric-card"><span class="metric-label">Municípios encontrados</span><strong id="municipioTotal">—</strong><span class="metric-caption">locais de prova</span></article>
-              <article class="metric-card metric-card-muted"><span class="metric-label">Cotas</span><strong>—</strong><span class="metric-caption">indisponível na fonte</span></article>
+              <article class="metric-card metric-card-muted"><span class="metric-label">Pessoa preta ou parda</span><strong id="cotaTotal">—</strong><span class="metric-caption" id="cotaCaption">recorte oficial no filtro</span></article>
             </section>
 
             <section class="rankings-grid" aria-label="Rankings de inscrições">
@@ -82,13 +86,13 @@
             <section class="records-section" aria-labelledby="recordsTitle">
               <div class="records-heading"><div><div class="panel-label"><span class="panel-number">03</span><span>Registros</span></div><h2 id="recordsTitle">Lista de inscrições</h2></div><button class="export-button" id="exportCsv" type="button"><span aria-hidden="true">↓</span> Exportar CSV</button></div>
               <div class="table-toolbar"><span id="resultSummary">—</span><label for="pageSize">Exibir <select id="pageSize"><option>25</option><option>50</option><option>100</option></select> por página</label></div>
-              <div class="table-wrap"><table><thead><tr><th><button class="sort-button" data-sort="inscricao">Inscrição <span>↕</span></button></th><th><button class="sort-button" data-sort="nome">Candidato <span>↕</span></button></th><th><button class="sort-button" data-sort="cargo">Cargo <span>↕</span></button></th><th><button class="sort-button" data-sort="municipio">Local de prova <span>↕</span></button></th></tr></thead><tbody id="recordsBody"><tr><td colspan="4" class="loading-cell">Carregando registros...</td></tr></tbody></table></div>
+              <div class="table-wrap"><table><thead><tr><th><button class="sort-button" data-sort="inscricao">Inscrição <span>↕</span></button></th><th><button class="sort-button" data-sort="nome">Candidato <span>↕</span></button></th><th><button class="sort-button" data-sort="cargo">Cargo <span>↕</span></button></th><th><button class="sort-button" data-sort="municipio">Local de prova <span>↕</span></button></th><th>Cota</th></tr></thead><tbody id="recordsBody"><tr><td colspan="5" class="loading-cell">Carregando registros...</td></tr></tbody></table></div>
               <div class="pagination"><span id="pageInfo">—</span><div><button id="previousPage" type="button" aria-label="Página anterior">←</button><button id="nextPage" type="button" aria-label="Próxima página">→</button></div></div>
             </section>
           </div>
         </section>
 
-        <section class="methodology" id="metodologia" aria-labelledby="methodologyTitle"><div class="methodology-mark" aria-hidden="true">⌁</div><div><div class="panel-label"><span class="panel-number">04</span><span>Transparência</span></div><h2 id="methodologyTitle">O que está — e o que não está — nesta leitura</h2><p>Os dados foram extraídos do resultado preliminar de homologação de inscrições publicado pela Fundação Getulio Vargas. Cada linha contém inscrição, nome, cargo e local de prova. O arquivo não informa vagas, cotas ou classificação; qualquer cálculo que exigisse esses campos seria uma suposição, então o painel prefere mostrar a ausência.</p><div class="methodology-meta"><span><b>Fonte</b><span id="sourceName">—</span></span><span><b>Publicação</b><span id="documentDate">—</span></span><span><b>Campos</b><span>inscrição · nome · cargo · local</span></span></div><a class="source-link" id="sourceLink" href="https://conhecimento.fgv.br/concursos/sesto26" target="_blank" rel="noreferrer">Consultar página oficial da FGV <span aria-hidden="true">↗</span></a></div></section>
+        <section class="methodology" id="metodologia" aria-labelledby="methodologyTitle"><div class="methodology-mark" aria-hidden="true">⌁</div><div><div class="panel-label"><span class="panel-number">04</span><span>Transparência</span></div><h2 id="methodologyTitle">O que está — e o que não está — nesta leitura</h2><p>Os dados foram extraídos de duas relações preliminares publicadas pela Fundação Getulio Vargas. A lista principal contém inscrição, nome, cargo e local de prova; a lista complementar identifica pessoas pretas ou pardas. O cruzamento usa exclusivamente o número de inscrição. Não há número de vagas, outras modalidades, classificação ou resultado de heteroidentificação.</p><div class="methodology-meta"><span><b>Fontes</b><span id="sourceName">—</span></span><span><b>Publicação</b><span id="documentDate">—</span></span><span><b>Campos</b><span>inscrição · nome · cargo · local · cota</span></span></div><a class="source-link" id="sourceLink" href="https://conhecimento.fgv.br/concursos/sesto26" target="_blank" rel="noreferrer">Consultar página oficial da FGV <span aria-hidden="true">↗</span></a></div></section>
       </main>
 
       <footer><span>Radar SES/TO <span class="footer-dot">•</span> consulta pública independente</span><span>Dados de fonte oficial · leitura sem classificação</span></footer>

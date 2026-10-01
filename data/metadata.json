@@ -1,15 +1,17 @@
 {
   "titulo": "Resultado preliminar de homologação de inscrições — Edital nº 001/2026 – SECAD/SES/TO",
-  "arquivoFonte": "sesto-preliminar-homologacoes(1).pdf",
+  "arquivosFonte": ["sesto-preliminar-homologacoes(1).pdf", "sesto-preliminar-pretos-ou-pardos.pdf"],
   "dataDocumento": "30 de setembro de 2026",
   "dataAtualizacao": "2026-10-01",
   "entidade": "Fundação Getulio Vargas / Governo do Estado do Tocantins",
   "urlOficial": "https://conhecimento.fgv.br/concursos/sesto26",
   "totalRegistros": 69970,
-  "camposDisponiveis": ["inscricao", "nome", "cargo", "localProva", "municipio"],
-  "cotasDisponiveis": false,
+  "totalPretosOuPardos": 9939,
+  "camposDisponiveis": ["inscricao", "nome", "cargo", "localProva", "municipio", "cota"],
+  "cotasDisponiveis": true,
+  "cotaDisponivel": "Pessoa preta ou parda",
   "vagasDisponiveis": false,
   "metrica": "Número de inscrições homologadas agrupadas por cargo e local de prova. Não é concorrência por vaga.",
-  "observacaoCotas": "O PDF não informa modalidade de cota nem classificação por cota. Os dados de cotas ficam indisponíveis até a inclusão de uma fonte oficial complementar.",
-  "observacaoPrivacidade": "A base reproduz uma relação oficial de inscrições homologadas; use os dados somente para consulta do concurso e não para enriquecer perfis pessoais."
+  "observacaoCotas": "A fonte complementar identifica candidatos inscritos para concorrer às vagas destinadas a pessoa preta ou parda. Ela não informa classificação por cota nem número de vagas.",
+  "observacaoPrivacidade": "A base reproduz relações oficiais do concurso; use os dados somente para consulta do certame e não para enriquecer perfis pessoais."
 }

@@ -1,32 +1,36 @@
 # Radar SES/TO
 
-Portal público para leitura da demanda observável do **Edital nº 001/2026 – SECAD/SES/TO**, a partir do resultado preliminar de homologação de inscrições publicado pela FGV.
+Portal público para leitura da demanda observável do **Edital nº 001/2026 – SECAD/SES/TO**, a partir das relações preliminares publicadas pela FGV.
 
 ## O que o site calcula
 
-A consulta conta inscrições homologadas por cargo e local de prova/município, com filtros combináveis, busca textual, rankings, tabela paginada e exportação CSV. A métrica é chamada de **inscrições homologadas** porque o PDF não informa o número de vagas. Portanto, este projeto não apresenta concorrência por vaga, classificação, nota ou probabilidade de aprovação.
+A consulta conta inscrições homologadas por cargo e local de prova/município, com filtros combináveis, busca textual, rankings, tabela paginada e exportação CSV. A métrica é chamada de **inscrições homologadas** porque os documentos não informam o número de vagas. Portanto, este projeto não apresenta concorrência por vaga, classificação, nota ou probabilidade de aprovação.
+
+A lista complementar de pessoas pretas ou pardas é cruzada pelo número de inscrição. O painel pode filtrar e mostrar a quantidade desse recorte por cargo e município dentro dos filtros ativos, além de exportá-lo em CSV, sem inferir raça/cor a partir de nomes ou outras características. “Não identificado na lista complementar” não significa automaticamente ampla concorrência.
 
 ## Cotas
 
-O PDF usado como fonte contém inscrição, nome, cargo e local de prova. Ele não contém modalidade de cota, categoria de reserva, número de vagas ou classificação por cota. Por isso, a seção de cotas aparece como **indisponível na fonte**. Nenhum dado de cota é inferido a partir do nome, cargo ou município.
+A fonte complementar contém a relação preliminar de candidatos inscritos para concorrer às vagas destinadas à pessoa preta ou parda. Foram cruzadas **9.939 inscrições** com a base principal. Essa fonte não contém outras modalidades de cota, número de vagas, resultado de heteroidentificação ou classificação; esses campos continuam indisponíveis.
 
-## Fonte
+## Fontes
 
 - Edital: nº 001/2026 – SECAD/SES/TO, de 12 de agosto de 2026.
-- Documento: `sesto-preliminar-homologacoes(1).pdf`.
+- Relação principal: `sesto-preliminar-homologacoes(1).pdf` — inscrições, nomes, cargos e locais de prova.
+- Relação complementar: `sesto-preliminar-pretos-ou-pardos.pdf` — inscrições de pessoas pretas ou pardas.
 - Publicação: 30 de setembro de 2026.
 - Página oficial: https://conhecimento.fgv.br/concursos/sesto26
-- Registros normalizados: 69.970.
+- Registros normalizados: 69.970; marcados como pessoa preta ou parda: 9.939.
 
 ## Atualizar os dados
 
 Com Python 3 e `pdftotext` instalados:
 
 ```bash
-python3 scripts/extract_data.py /caminho/novo.pdf public/data/inscricoes.json
+python3 scripts/extract_data.py /caminho/inscricoes.pdf data/inscricoes.json
+python3 scripts/apply_cotas.py data/inscricoes.json /caminho/pretos-ou-pardos.pdf
 ```
 
-Depois, ajuste `public/data/metadata.json` com a data, arquivo, total e URL da nova fonte. A aplicação é estática: qualquer servidor HTTP simples pode servi-la, por exemplo:
+Depois, ajuste `data/metadata.json` com a data, arquivos, total e URL das novas fontes. A aplicação é estática e pode ser servida por qualquer servidor HTTP simples:
 
 ```bash
 python3 -m http.server 3000 --bind 0.0.0.0
@@ -37,7 +41,8 @@ Abra `http://localhost:3000`.
 ## Estrutura
 
 - `index.html` — interface semântica.
-- `src/app.js` — filtros, agregações, tabela e exportação.
+- `src/app.js` — filtros, agregações, tabela, cota e exportação.
 - `src/styles.css` — identidade visual responsiva.
-- `public/data/` — base e metadados.
-- `scripts/extract_data.py` — parser reproduzível do PDF com tratamento de quebras de linha.
+- `data/` — base e metadados.
+- `scripts/extract_data.py` — parser do PDF principal com tratamento de quebras de linha.
+- `scripts/apply_cotas.py` — cruzamento da lista complementar pelo número de inscrição.

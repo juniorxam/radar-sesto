@@ -4,6 +4,7 @@ const state = {
   search: '',
   cargo: '',
   municipio: '',
+  cota: '',
   sortKey: 'nome',
   sortDirection: 'asc',
   page: 1,
@@ -26,7 +27,8 @@ function applyFilters() {
   const needle = normalize(state.search.trim());
   state.filtered = state.records.filter((record) => {
     const matchesSearch = !needle || [record.inscricao, record.nome, record.cargo, record.localProva].some((field) => normalize(field).includes(needle));
-    return matchesSearch && (!state.cargo || record.cargo === state.cargo) && (!state.municipio || record.municipio === state.municipio);
+    const matchesCota = !state.cota || (state.cota === '__sem_marcacao__' ? !record.cota : record.cota === state.cota);
+    return matchesSearch && (!state.cargo || record.cargo === state.cargo) && (!state.municipio || record.municipio === state.municipio) && matchesCota;
   });
   const maxPage = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
   state.page = Math.min(state.page, maxPage);
@@ -65,9 +67,9 @@ function renderTable() {
   const start = (state.page - 1) * state.pageSize;
   const visible = records.slice(start, start + state.pageSize);
   if (!visible.length) {
-    $('#recordsBody').innerHTML = '<tr><td colspan="4" class="empty-cell"><strong>Nenhum registro encontrado</strong>Tente remover um filtro ou usar outro termo de busca.</td></tr>';
+    $('#recordsBody').innerHTML = '<tr><td colspan="5" class="empty-cell"><strong>Nenhum registro encontrado</strong>Tente remover um filtro ou usar outro termo de busca.</td></tr>';
   } else {
-    $('#recordsBody').innerHTML = visible.map((record) => `<tr><td>${escapeHtml(record.inscricao)}</td><td>${escapeHtml(record.nome)}</td><td>${escapeHtml(record.cargo)}</td><td>${escapeHtml(record.localProva)}</td></tr>`).join('');
+    $('#recordsBody').innerHTML = visible.map((record) => `<tr><td>${escapeHtml(record.inscricao)}</td><td>${escapeHtml(record.nome)}</td><td>${escapeHtml(record.cargo)}</td><td>${escapeHtml(record.localProva)}</td><td>${record.cota ? '<span class="quota-pill">Pessoa preta ou parda</span>' : '<span class="quota-muted">Não identificado</span>'}</td></tr>`).join('');
   }
   const totalPages = Math.max(1, Math.ceil(records.length / state.pageSize));
   const from = records.length ? start + 1 : 0;
@@ -84,13 +86,16 @@ function renderTable() {
 function render() {
   const cargoCount = new Set(state.filtered.map((record) => record.cargo)).size;
   const municipioCount = new Set(state.filtered.map((record) => record.municipio)).size;
+  const cotaCount = state.filtered.filter((record) => record.cota === 'Pessoa preta ou parda').length;
   $('#filteredTotal').textContent = number.format(state.filtered.length);
   $('#filteredCaption').textContent = `de ${number.format(state.records.length)} na base completa`;
   $('#cargoTotal').textContent = number.format(cargoCount);
   $('#municipioTotal').textContent = number.format(municipioCount);
+  $('#cotaTotal').textContent = number.format(cotaCount);
+  $('#cotaCaption').textContent = `de ${number.format(state.filtered.length)} no recorte`;
   $('#heroTotal').textContent = number.format(state.records.length);
   $('#filterStatus').textContent = state.filtered.length === state.records.length ? 'Exibindo a base completa.' : `${number.format(state.filtered.length)} registros correspondem ao seu recorte.`;
-  const chips = [state.cargo, state.municipio].filter(Boolean);
+  const chips = [state.cargo, state.municipio, state.cota === '__sem_marcacao__' ? 'Sem marcação na lista complementar' : state.cota].filter(Boolean);
   $('#scopeChip').textContent = chips.length ? chips.join(' · ') : (state.search ? `Busca: “${state.search}”` : 'Todos os registros');
   renderRankings(state.filtered, 'cargo', '#cargoRanking', '#cargoRankingCount');
   renderRankings(state.filtered, 'municipio', '#municipioRanking', '#municipioRankingCount');
@@ -116,8 +121,9 @@ function bindEvents() {
   $('#searchInput').addEventListener('input', (event) => { state.search = event.target.value; state.page = 1; applyFilters(); });
   $('#cargoSelect').addEventListener('change', (event) => { state.cargo = event.target.value; state.page = 1; applyFilters(); });
   $('#municipioSelect').addEventListener('change', (event) => { state.municipio = event.target.value; state.page = 1; applyFilters(); });
+  $('#cotaSelect').addEventListener('change', (event) => { state.cota = event.target.value; state.page = 1; applyFilters(); });
   $('#pageSize').addEventListener('change', (event) => { state.pageSize = Number(event.target.value); state.page = 1; renderTable(); });
-  $('#clearFilters').addEventListener('click', () => { state.search = ''; state.cargo = ''; state.municipio = ''; state.page = 1; $('#searchInput').value = ''; $('#cargoSelect').value = ''; $('#municipioSelect').value = ''; applyFilters(); });
+  $('#clearFilters').addEventListener('click', () => { state.search = ''; state.cargo = ''; state.municipio = ''; state.cota = ''; state.page = 1; $('#searchInput').value = ''; $('#cargoSelect').value = ''; $('#municipioSelect').value = ''; $('#cotaSelect').value = ''; applyFilters(); });
   $('#previousPage').addEventListener('click', () => { if (state.page > 1) { state.page -= 1; renderTable(); } });
   $('#nextPage').addEventListener('click', () => { const totalPages = Math.ceil(state.filtered.length / state.pageSize); if (state.page < totalPages) { state.page += 1; renderTable(); } });
   $('#exportCsv').addEventListener('click', exportCsv);
@@ -137,7 +143,7 @@ async function init() {
     const metadata = await metadataResponse.json();
     populateOptions(state.records);
     $('#updatedAt').textContent = `Atualizada em ${new Date(`${metadata.dataAtualizacao}T12:00:00`).toLocaleDateString('pt-BR')}`;
-    $('#sourceName').textContent = metadata.arquivoFonte;
+    $('#sourceName').textContent = metadata.arquivosFonte.join(' + ');
     $('#documentDate').textContent = metadata.dataDocumento;
     bindEvents();
     applyFilters();

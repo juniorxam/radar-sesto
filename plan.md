@@ -2,26 +2,27 @@
 
 ## Objetivo
 
-Publicar uma consulta pública, responsiva e transparente para as inscrições homologadas do Edital nº 001/2026 – SECAD/SES/TO. A métrica exibida será o número de inscrições homologadas por cargo e local de prova. O PDF não informa vagas, modalidade de cota ou classificação por cota; esses campos ficam explicitamente indisponíveis.
+Publicar uma consulta pública, responsiva e transparente para as inscrições homologadas do Edital nº 001/2026 – SECAD/SES/TO. A métrica exibida será o número de inscrições homologadas por cargo e local de prova. O PDF principal não informa vagas nem classificação por cota; a fonte complementar recebida depois identifica a condição de pessoa preta ou parda e é cruzada pelo número de inscrição.
 
 ## Decisões de implementação
 
 - Aplicação estática em HTML, CSS e JavaScript, sem servidor ou banco, porque a fonte é um PDF fechado e a consulta pode ser feita inteiramente no navegador.
-- Dados processados em `public/data/inscricoes.json`, acompanhados de `public/data/metadata.json`.
+- Dados processados em `data/inscricoes.json`, acompanhados de `data/metadata.json`.
 - `scripts/extract_data.py` reproduz a extração usando o layout XML do `pdftotext`, tratando quebras de linha de nomes e cargos.
 - Interface com busca textual, filtros combináveis por cargo e local, ordenação, paginação, exportação CSV e resumos reativos.
 - A concorrência é rotulada como “inscrições homologadas” e não como concorrência por vaga, porque o número de vagas não está no PDF.
-- O painel de cotas mostra “indisponível na fonte” e orienta a adicionar uma publicação oficial complementar antes de fazer qualquer cálculo.
+- O painel de cotas identifica somente “Pessoa preta ou parda” quando há correspondência oficial pelo número de inscrição; não infere outras cotas nem classificação.
 
 ## Estrutura do projeto
 
 - `index.html`: casca da aplicação, metadados e regiões semânticas.
 - `src/app.js`: carregamento, estado de filtros, agregações, renderização, paginação e CSV.
 - `src/styles.css`: sistema visual responsivo.
-- `public/data/inscricoes.json`: registros normalizados.
-- `public/data/metadata.json`: fonte, escopo e limitações.
-- `public/manus-routes.json`: manifesto de rota exigido pelo Preview.
-- `scripts/extract_data.py`: reprocessamento do PDF oficial.
+- `data/inscricoes.json`: registros normalizados.
+- `data/metadata.json`: fontes, escopo e limitações.
+- `manus-routes.json`: manifesto de rota exigido pelo Preview.
+- `scripts/extract_data.py`: reprocessamento do PDF principal.
+- `scripts/apply_cotas.py`: cruzamento da lista oficial de pessoas pretas ou pardas pelo número de inscrição.
 - `README.md`: documentação para uso e atualização.
 
 ## Direção visual
